@@ -21,7 +21,7 @@ incident_data = {
     "event_description": "A forklift collision occurred at 9:45 AM in the warehouse when the operator didn't see the pedestrian crossing. The pedestrian sustained injuries."
 }
 
-# Combine all the data into a single string for analysis
+# Modify the prompt to explicitly ask for an analysis
 combined_incident_data = f"""
 Incident Description: {incident_data['event_description']}
 
@@ -29,20 +29,24 @@ Witness Statements: {incident_data['witness_statements']}
 
 Follow-up Interview: {incident_data['follow_up_questions']}
 
-Provide a detailed ICAM safety analysis of this event, including contributing factors, root causes, and recommendations.
+Please provide a detailed ICAM safety analysis, including:
+1. A description of the incident.
+2. The contributing factors and root causes.
+3. Recommendations to prevent this type of incident from reoccurring.
 """
 
 # Step 3: Tokenize the input data with an attention mask, using the eos_token as the padding token
 inputs = tokenizer(combined_incident_data, return_tensors="pt", max_length=512, truncation=True, padding=True)
 attention_mask = inputs['attention_mask']  # Extract the attention mask
 
-# Step 4: Generate the analysis using GPT-J, with attention mask
+# Step 4: Generate the analysis using GPT-J, adjusting generation parameters
 summary_ids = model.generate(
     inputs['input_ids'],
     attention_mask=attention_mask,  # Pass the attention mask
-    max_length=300,
-    num_beams=4,
-    no_repeat_ngram_size=2,
+    max_length=500,  # Allow more room for the model to generate detailed text
+    num_beams=2,  # Less restrictive, allowing for more creative responses
+    temperature=0.9,  # Add a little randomness to encourage diverse outputs
+    no_repeat_ngram_size=2,  # Avoid repeating phrases
     early_stopping=True
 )
 
