@@ -1,15 +1,26 @@
-# Test mBART large
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
-
 # Import the necessary libraries
-from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import GPTJForCausalLM, GPT2Tokenizer
 
 # Step 1: Load the GPT-J model and tokenizer
 model_name = 'EleutherAI/gpt-j-6B'  # GPT-J model
-tokenizer = AutoTokenizer.from_pretrained(model_name)
-model = AutoModelForCausalLM.from_pretrained(model_name)
+tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+model = GPTJForCausalLM.from_pretrained(model_name)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Set the pad_token to the eos_token
 tokenizer.pad_token = tokenizer.eos_token
